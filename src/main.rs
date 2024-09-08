@@ -2,10 +2,12 @@ use minigrep::Config;
 use std::{env, process};
 
 fn main() {
+    dotenv::dotenv().ok();
+
     let args: Vec<String> = env::args().collect();
 
     let config: Config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments {err}");
+        eprintln!("Problem parsing arguments {err}");
         process::exit(1);
     });
 
@@ -13,7 +15,7 @@ fn main() {
     println!("In file {}", config.file_path);
 
     if let Err(e) = minigrep::run(config) {
-        println!("Application error: {e}");
+        eprintln!("Application error: {e}");
         process::exit(1);
     }
 }
